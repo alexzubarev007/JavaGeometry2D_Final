@@ -11,7 +11,6 @@ import misc.CoordinateSystem2i;
 import misc.Vector2d;
 import misc.Vector2i;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static app.Application.PANEL_PADDING;
@@ -105,10 +104,10 @@ public class PanelControl extends GridPanel {
                 PanelLog.warning("X координата введена неверно");
             } else if (!yField.hasValidDoubleValue()) {
                 PanelLog.warning("Y координата введена неверно");
-            } else if (!rField.hasValidDoubleValue()) {
+            } else if (!rField.hasValidDoubleValue() || rField.doubleValue() <= 0) {
                 PanelLog.warning("R парметр введен неверно");
-            }  else {
-//                PanelRendering.task.addPoint(new Vector2d(xField.doubleValue(), yField.doubleValue()));
+            } else {
+                PanelRendering.task.addCircle(new Vector2d(xField.doubleValue(), yField.doubleValue()), rField.doubleValue());
             }
         });
         buttons.add(addCircle);
@@ -131,7 +130,7 @@ public class PanelControl extends GridPanel {
             if (!cntField.hasValidIntValue()) {
                 PanelLog.warning("кол-во точек указано неверно");
             } else {
-//                PanelRendering.task.addRandomPoints(cntField.intValue());
+                PanelRendering.task.addRandomCircles(cntField.intValue());
             }
         });
         buttons.add(addRndCircles);
@@ -199,23 +198,25 @@ public class PanelControl extends GridPanel {
                     button.checkOver(lastWindowCS.getRelativePos(new Vector2i(ee)));
             }
             // событие нажатия мыши
-        } else if (e instanceof EventMouseButton) {
+        } else if (e instanceof EventMouseButton ee) {
             if (!lastInside)
                 return;
 
             Vector2i relPos = lastWindowCS.getRelativePos(lastMove);
 
-            // пробуем кликнуть по всем кнопкам
-            for (Button button : buttons) {
-                button.click(relPos);
-            }
+            if (ee.isPressed()) {
+                // пробуем кликнуть по всем кнопкам
+                for (Button button : buttons) {
+                    button.click(relPos);
+                }
 
-            // перебираем поля ввода
-            for (Input input : inputs) {
-                // если клик внутри этого поля
-                if (input.contains(relPos)) {
-                    // переводим фокус на это поле ввода
-                    input.setFocus();
+                // перебираем поля ввода
+                for (Input input : inputs) {
+                    // если клик внутри этого поля
+                    if (input.contains(relPos)) {
+                        // переводим фокус на это поле ввода
+                        input.setFocus();
+                    }
                 }
             }
             // перерисовываем окно

@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.github.humbleui.jwm.MouseButton;
 import io.github.humbleui.skija.Paint;
-import io.github.humbleui.skija.Rect;
 import lombok.Getter;
 import misc.CoordinateSystem2d;
 import misc.CoordinateSystem2i;
@@ -14,9 +12,7 @@ import misc.Vector2d;
 import misc.Vector2i;
 import panels.PanelLog;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static app.Colors.CROSSED_COLOR;
 import static app.Colors.CIRCLE_COLOR;
@@ -80,9 +76,6 @@ public class Task {
         this.ownCS = ownCS;
         this.circles = circles;
         this.crossed = new ArrayList<>();
-        this.circles.add(new Circle(new Vector2d(0, 0), 7));
-        this.crossed.add(new Circle(new Vector2d(-1, -1), 3));
-        this.crossed.add(new Circle(new Vector2d(3, 2), 7));
     }
 
     /**
@@ -121,18 +114,18 @@ public class Task {
         }
     }
 
-//    /**
-//     * Добавить точку
-//     *
-//     * @param pos      положение
-//     * @param pointSet множество
-//     */
-//    public void addPoint(Vector2d pos) {
-//        solved = false;
-//        Point newPoint = new Point(pos, pointSet);
-//        points.add(newPoint);
-//        PanelLog.info("точка " + newPoint + " добавлена в " + newPoint.getSetName());
-//    }
+    /**
+     * Добавить окружность
+     *
+     * @param pos      положение центра окружности
+     * @param rad      радиус окружности
+     */
+    public void addCircle(Vector2d pos, double rad) {
+        solved = false;
+        Circle newCircle = new Circle(pos, rad);
+        circles.add(newCircle);
+        PanelLog.info("окружность " + newCircle + " добавлена");
+    }
 //    /**
 //     * Клик мыши по пространству задачи
 //     *
@@ -157,34 +150,19 @@ public class Task {
 //            addPoint(taskPos, Point.PointSet.SECOND_SET);
 //        }
 //    }
-//    /**
-//     * Добавить случайные точки
-//     *
-//     * @param cnt кол-во случайных точек
-//     */
-//    public void addRandomPoints(int cnt) {
-//        // если создавать точки с полностью случайными координатами,
-//        // то вероятность того, что они совпадут крайне мала
-//        // поэтому нужно создать вспомогательную малую целочисленную ОСК
-//        // для получения случайной точки мы будем запрашивать случайную
-//        // координату этой решётки (их всего 30х30=900).
-//        // после нам останется только перевести координаты на решётке
-//        // в координаты СК задачи
-//        CoordinateSystem2i addGrid = new CoordinateSystem2i(30, 30);
-//
-//        // повторяем заданное количество раз
-//        for (int i = 0; i < cnt; i++) {
-//            // получаем случайные координаты на решётке
-//            Vector2i gridPos = addGrid.getRandomCoords();
-//            // получаем координаты в СК задачи
-//            Vector2d pos = ownCS.getCoords(gridPos, addGrid);
-//            // сработает примерно в половине случаев
-//            if (ThreadLocalRandom.current().nextBoolean())
-//                addPoint(pos, Point.PointSet.FIRST_SET);
-//            else
-//                addPoint(pos, Point.PointSet.SECOND_SET);
-//        }
-//    }
+    /**
+     * Добавить случайные окружности
+     *
+     * @param cnt кол-во случайных точек
+     */
+    public void addRandomCircles(int cnt) {
+        // повторяем заданное количество раз
+        for (int i = 0; i < cnt; i++) {
+            double rad = ownCS.getRandomCoords().x;
+            while (rad == 0) rad = ownCS.getRandomCoords().x;
+            addCircle(ownCS.getRandomCoords(), Math.abs(rad));
+        }
+    }
 //    /**
 //     * Очистить задачу
 //     */
