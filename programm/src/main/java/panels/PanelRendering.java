@@ -1,6 +1,5 @@
 package panels;
 
-import app.Point;
 import app.Task;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.humbleui.jwm.Event;
