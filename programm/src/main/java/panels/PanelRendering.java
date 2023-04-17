@@ -69,10 +69,8 @@ public class PanelRendering extends GridPanel {
         if (e instanceof EventMouseButton ee) {
             // если последнее положение мыши сохранено и курсор был внутри
             if (lastMove != null && lastInside) {
-                // если событие - нажатие мыши
-                if (ee.isPressed()) {}
-                    // обрабатываем клик по задаче
-//                    task.click(lastWindowCS.getRelativePos(lastMove), ee.getButton());
+                // обрабатываем клик по задаче
+                task.click(lastWindowCS.getRelativePos(lastMove));
             }
         }
     }

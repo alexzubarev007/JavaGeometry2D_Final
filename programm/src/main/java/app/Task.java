@@ -50,6 +50,17 @@ public class Task {
      * последняя СК окна
      */
     protected CoordinateSystem2i lastWindowCS;
+
+    /**
+     * предыдущее нажатие мыши
+     */
+    private Vector2d prevClick;
+
+    /**
+     * счётчик нажатий мыши
+     */
+    private int clicksCnt;
+
     /**
      * Флаг, решена ли задача
      */
@@ -76,6 +87,7 @@ public class Task {
         this.ownCS = ownCS;
         this.circles = circles;
         this.crossed = new ArrayList<>();
+        this.clicksCnt = 0;
     }
 
     /**
@@ -126,34 +138,30 @@ public class Task {
         circles.add(newCircle);
         PanelLog.info("окружность " + newCircle + " добавлена");
     }
-//    /**
-//     * Клик мыши по пространству задачи
-//     *
-//     * @param pos         положение мыши
-//     * @param mouseButton кнопка мыши
-//     */
-//    /**
-//     * Клик мыши по пространству задачи
-//     *
-//     * @param pos         положение мыши
-//     * @param mouseButton кнопка мыши
-//     */
-//    public void click(Vector2i pos, MouseButton mouseButton) {
-//        if (lastWindowCS == null) return;
-//        // получаем положение на экране
-//        Vector2d taskPos = ownCS.getCoords(pos, lastWindowCS);
-//        // если левая кнопка мыши, добавляем в первое множество
-//        if (mouseButton.equals(MouseButton.PRIMARY)) {
-//            addPoint(taskPos, Point.PointSet.FIRST_SET);
-//            // если правая, то во второе
-//        } else if (mouseButton.equals(MouseButton.SECONDARY)) {
-//            addPoint(taskPos, Point.PointSet.SECOND_SET);
-//        }
-//    }
+    /**
+     * Клик мыши по пространству задачи
+     *
+     * @param pos         положение мыши
+     */
+    public void click(Vector2i pos) {
+        if (lastWindowCS == null) return;
+        // получаем положение на экране
+        Vector2d taskPos = ownCS.getCoords(pos, lastWindowCS);
+        taskPos.y *= -1;
+        if (clicksCnt == 0) {
+            prevClick = taskPos;
+            clicksCnt = 1;
+        } else {
+            double rad = Vector2d.subtract(taskPos, prevClick).length();
+            if (rad != 0)
+                addCircle(prevClick, rad);
+            clicksCnt = 0;
+        }
+    }
     /**
      * Добавить случайные окружности
      *
-     * @param cnt кол-во случайных точек
+     * @param cnt кол-во случайных окружностей
      */
     public void addRandomCircles(int cnt) {
         // повторяем заданное количество раз
