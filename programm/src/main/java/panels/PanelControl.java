@@ -130,8 +130,9 @@ public class PanelControl extends GridPanel {
             // если числа введены верно
             if (!cntField.hasValidIntValue()) {
                 PanelLog.warning("кол-во точек указано неверно");
-            } else
-                PanelRendering.task.addRandomPoints(cntField.intValue());
+            } else {
+//                PanelRendering.task.addRandomPoints(cntField.intValue());
+            }
         });
         buttons.add(addRndCircles);
         // управление
@@ -156,7 +157,7 @@ public class PanelControl extends GridPanel {
                 window, false, backgroundColor, PANEL_PADDING,
                 6, 7, 0, 6, 3, 1, "Очистить",
                 true, true);
-        clear.setOnClick(() -> PanelRendering.task.clear());
+//        clear.setOnClick(() -> PanelRendering.task.clear());
         buttons.add(clear);
 
         solve = new Button(
@@ -164,17 +165,17 @@ public class PanelControl extends GridPanel {
                 6, 7, 3, 6, 3, 1, "Решить",
                 true, true);
         solve.setOnClick(() -> {
-            if (!PanelRendering.task.isSolved()) {
-                PanelRendering.task.solve();
-                String s = "Задача решена\n" +
-                        "Пересечений: " + PanelRendering.task.getCrossed().size() / 2 + "\n" +
-                        "Отдельных точек: " + PanelRendering.task.getSingle().size();
-                PanelLog.success(s);
-                solve.text = "Сбросить";
-            } else {
-                cancelTask();
-            }
-            window.requestFrame();
+//            if (!PanelRendering.task.isSolved()) {
+//                PanelRendering.task.solve();
+//                String s = "Задача решена\n" +
+//                        "Пересечений: " + PanelRendering.task.getCrossed().size() / 2 + "\n" +
+//                        "Отдельных точек: " + PanelRendering.task.getSingle().size();
+//                PanelLog.success(s);
+//                solve.text = "Сбросить";
+//            } else {
+//                cancelTask();
+//            }
+//            window.requestFrame();
         });
         buttons.add(solve);
     }
@@ -268,7 +269,7 @@ public class PanelControl extends GridPanel {
      * Сброс решения задачи
      */
     private void cancelTask() {
-        PanelRendering.task.cancel();
+//        PanelRendering.task.cancel();
         // Задаём новый текст кнопке решения
         solve.text = "Решить";
     }

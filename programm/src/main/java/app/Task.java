@@ -41,11 +41,11 @@ public class Task {
      */
     @Getter
     private final CoordinateSystem2d ownCS;
-//    /**
-//     * Список точек
-//     */
-//    @Getter
-//    private final ArrayList<> points;
+    /**
+     * Список окружностей
+     */
+    @Getter
+    private final ArrayList<Circle> circles;
     /**
      * Размер точки
      */
@@ -58,34 +58,28 @@ public class Task {
      * Флаг, решена ли задача
      */
     private boolean solved;
+
     /**
      * Список точек в пересечении
      */
     @Getter
     @JsonIgnore
     private final ArrayList<Point> crossed;
-    /**
-     * Список точек в разности
-     */
-    @Getter
-    @JsonIgnore
-    private final ArrayList<Point> single;
 
     /**
      * Задача
      *
      * @param ownCS  СК задачи
-     * @param points массив точек
+     * @param circles массив окружностей
      */
     @JsonCreator
     public Task(
             @JsonProperty("ownCS") CoordinateSystem2d ownCS,
-            @JsonProperty("points") ArrayList<Point> points
+            @JsonProperty("points") ArrayList<Circle> circles
     ) {
         this.ownCS = ownCS;
-//        this.points = points;
+        this.circles = circles;
         this.crossed = new ArrayList<>();
-        this.single = new ArrayList<>();
     }
 
     /**
@@ -119,48 +113,48 @@ public class Task {
         canvas.restore();
 
     }
-    /**
-     * Добавить точку
-     *
-     * @param pos      положение
-     * @param pointSet множество
-     */
-    public void addPoint(Vector2d pos, Point.PointSet pointSet) {
-        solved = false;
-        Point newPoint = new Point(pos, pointSet);
+//    /**
+//     * Добавить точку
+//     *
+//     * @param pos      положение
+//     * @param pointSet множество
+//     */
+//    public void addPoint(Vector2d pos) {
+//        solved = false;
+//        Point newPoint = new Point(pos, pointSet);
 //        points.add(newPoint);
-        PanelLog.info("точка " + newPoint + " добавлена в " + newPoint.getSetName());
-    }
-    /**
-     * Клик мыши по пространству задачи
-     *
-     * @param pos         положение мыши
-     * @param mouseButton кнопка мыши
-     */
-    /**
-     * Клик мыши по пространству задачи
-     *
-     * @param pos         положение мыши
-     * @param mouseButton кнопка мыши
-     */
-    public void click(Vector2i pos, MouseButton mouseButton) {
-        if (lastWindowCS == null) return;
-        // получаем положение на экране
-        Vector2d taskPos = ownCS.getCoords(pos, lastWindowCS);
-        // если левая кнопка мыши, добавляем в первое множество
-        if (mouseButton.equals(MouseButton.PRIMARY)) {
-            addPoint(taskPos, Point.PointSet.FIRST_SET);
-            // если правая, то во второе
-        } else if (mouseButton.equals(MouseButton.SECONDARY)) {
-            addPoint(taskPos, Point.PointSet.SECOND_SET);
-        }
-    }
-    /**
-     * Добавить случайные точки
-     *
-     * @param cnt кол-во случайных точек
-     */
-    public void addRandomPoints(int cnt) {
+//        PanelLog.info("точка " + newPoint + " добавлена в " + newPoint.getSetName());
+//    }
+//    /**
+//     * Клик мыши по пространству задачи
+//     *
+//     * @param pos         положение мыши
+//     * @param mouseButton кнопка мыши
+//     */
+//    /**
+//     * Клик мыши по пространству задачи
+//     *
+//     * @param pos         положение мыши
+//     * @param mouseButton кнопка мыши
+//     */
+//    public void click(Vector2i pos, MouseButton mouseButton) {
+//        if (lastWindowCS == null) return;
+//        // получаем положение на экране
+//        Vector2d taskPos = ownCS.getCoords(pos, lastWindowCS);
+//        // если левая кнопка мыши, добавляем в первое множество
+//        if (mouseButton.equals(MouseButton.PRIMARY)) {
+//            addPoint(taskPos, Point.PointSet.FIRST_SET);
+//            // если правая, то во второе
+//        } else if (mouseButton.equals(MouseButton.SECONDARY)) {
+//            addPoint(taskPos, Point.PointSet.SECOND_SET);
+//        }
+//    }
+//    /**
+//     * Добавить случайные точки
+//     *
+//     * @param cnt кол-во случайных точек
+//     */
+//    public void addRandomPoints(int cnt) {
 //        // если создавать точки с полностью случайными координатами,
 //        // то вероятность того, что они совпадут крайне мала
 //        // поэтому нужно создать вспомогательную малую целочисленную ОСК
@@ -182,37 +176,37 @@ public class Task {
 //            else
 //                addPoint(pos, Point.PointSet.SECOND_SET);
 //        }
-    }
-    /**
-     * Очистить задачу
-     */
-    public void clear() {
+//    }
+//    /**
+//     * Очистить задачу
+//     */
+//    public void clear() {
 //        points.clear();
-        solved = false;
-    }
-    /**
-     * Решить задачу
-     */
-    public void solve() {
-
-
-        // задача решена
-        solved = true;
-    }
-    /**
-     * Отмена решения задачи
-     */
-    public void cancel() {
-        solved = false;
-    }
-    /**
-     * проверка, решена ли задача
-     *
-     * @return флаг
-     */
-    public boolean isSolved() {
-        return solved;
-    }
+//        solved = false;
+//    }
+//    /**
+//     * Решить задачу
+//     */
+//    public void solve() {
+//
+//
+//        // задача решена
+//        solved = true;
+//    }
+//    /**
+//     * Отмена решения задачи
+//     */
+//    public void cancel() {
+//        solved = false;
+//    }
+//    /**
+//     * проверка, решена ли задача
+//     *
+//     * @return флаг
+//     */
+//    public boolean isSolved() {
+//        return solved;
+//    }
 }
 
 
