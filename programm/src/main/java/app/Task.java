@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static app.Colors.CROSSED_COLOR;
-import static app.Colors.SUBTRACTED_COLOR;
+import static app.Colors.CIRCLE_COLOR;
 
 /**
  * Класс задачи
@@ -60,11 +60,11 @@ public class Task {
     private boolean solved;
 
     /**
-     * Список точек в пересечении
+     * Окружности в ответе
      */
     @Getter
     @JsonIgnore
-    private final ArrayList<Point> crossed;
+    private final ArrayList<Circle> crossed;
 
     /**
      * Задача
@@ -80,6 +80,9 @@ public class Task {
         this.ownCS = ownCS;
         this.circles = circles;
         this.crossed = new ArrayList<>();
+        this.circles.add(new Circle(new Vector2d(0, 0), 7));
+        this.crossed.add(new Circle(new Vector2d(-1, -1), 3));
+        this.crossed.add(new Circle(new Vector2d(3, 2), 7));
     }
 
     /**
@@ -94,25 +97,30 @@ public class Task {
         canvas.save();
         // создаём перо
         try (var paint = new Paint()) {
-//            for (Point p : points) {
-//                if (!solved) {
-//                    paint.setColor(p.getColor());
-//                } else {
-//                    if (crossed.contains(p))
-//                        paint.setColor(CROSSED_COLOR);
-//                    else
-//                        paint.setColor(SUBTRACTED_COLOR);
-//                }
-//                // y-координату разворачиваем, потому что у СК окна ось y направлена вниз,
-//                // а в классическом представлении - вверх
-//                Vector2i windowPos = windowCS.getCoords(p.pos.x, p.pos.y, ownCS);
-//                // рисуем точку
-//                canvas.drawRect(Rect.makeXYWH(windowPos.x - POINT_SIZE, windowPos.y - POINT_SIZE, POINT_SIZE * 2, POINT_SIZE * 2), paint);
-//            }
+            paint.setColor(CIRCLE_COLOR);
+            for (Circle c : circles) {
+                printCircle(c, paint, windowCS, ownCS, canvas);
+            }
+            paint.setColor(CROSSED_COLOR);
+            for (Circle c : crossed) {
+                printCircle(c, paint, windowCS, ownCS, canvas);
+            }
         }
         canvas.restore();
-
     }
+
+    protected static void printCircle(Circle c, Paint paint, CoordinateSystem2i windowCS, CoordinateSystem2d ownCS, io.github.humbleui.skija.Canvas canvas) {
+        double delta = Math.acos(1 - (1 / (50 * c.rad)));
+        for (double angle = 0; angle <= Math.PI * 2; angle += delta) {
+            // y-координату разворачиваем, потому что у СК окна ось y направлена вниз,
+            // а в классическом представлении - вверх
+            Vector2i windowPos1 = windowCS.getCoords(c.center.x + c.rad * Math.cos(angle), -(c.center.y + c.rad * Math.sin(angle)), ownCS);
+            Vector2i windowPos2 = windowCS.getCoords(c.center.x + c.rad * Math.cos(angle + delta), -(c.center.y + c.rad * Math.sin(angle + delta)), ownCS);
+            // рисуем окружность
+            canvas.drawLine(windowPos1.x, windowPos1.y, windowPos2.x, windowPos2.y, paint);
+        }
+    }
+
 //    /**
 //     * Добавить точку
 //     *

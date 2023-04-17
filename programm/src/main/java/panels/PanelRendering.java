@@ -90,9 +90,6 @@ public class PanelRendering extends GridPanel {
     /**
      * Сохранить файл
      */
-    /**
-     * Сохранить файл
-     */
     public static void save() {
         String path = "src/main/resources/conf.json";
         try {

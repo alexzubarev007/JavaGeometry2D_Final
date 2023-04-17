@@ -34,11 +34,11 @@ public class Colors {
     /**
      * Цвет пересечения
      */
-    public static final int CROSSED_COLOR = Misc.getColor(200, 0, 255, 255);
+    public static final int CROSSED_COLOR = Misc.getColor(200, 255, 255, 0);
     /**
-     * Цвет разности
+     * Цвет окружности
      */
-    public static final int SUBTRACTED_COLOR = Misc.getColor(200, 255, 255, 0);
+    public static final int CIRCLE_COLOR = Misc.getColor(200, 0, 255, 255);
 
 
     /**
