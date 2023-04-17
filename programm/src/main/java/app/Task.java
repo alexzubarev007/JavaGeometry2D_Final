@@ -31,19 +31,21 @@ public class Task {
      */
     public static final String TASK_TEXT = """
             ПОСТАНОВКА ЗАДАЧИ:
-            Заданы два множества точек в вещественном
-            пространстве. Требуется построить пересечение
-            и разность этих множеств""";
+            На плоскости задано множество окружностей. Найти
+            такую пару пересекающихся окружностей, что длина  
+            отрезка, проведенного от одной точки пересечения 
+            этих двух окружностей до другой, максимальна.
+            """;
     /**
      * Вещественная система координат задачи
      */
     @Getter
     private final CoordinateSystem2d ownCS;
-    /**
-     * Список точек
-     */
-    @Getter
-    private final ArrayList<Point> points;
+//    /**
+//     * Список точек
+//     */
+//    @Getter
+//    private final ArrayList<> points;
     /**
      * Размер точки
      */
@@ -81,7 +83,7 @@ public class Task {
             @JsonProperty("points") ArrayList<Point> points
     ) {
         this.ownCS = ownCS;
-        this.points = points;
+//        this.points = points;
         this.crossed = new ArrayList<>();
         this.single = new ArrayList<>();
     }
@@ -98,21 +100,21 @@ public class Task {
         canvas.save();
         // создаём перо
         try (var paint = new Paint()) {
-            for (Point p : points) {
-                if (!solved) {
-                    paint.setColor(p.getColor());
-                } else {
-                    if (crossed.contains(p))
-                        paint.setColor(CROSSED_COLOR);
-                    else
-                        paint.setColor(SUBTRACTED_COLOR);
-                }
-                // y-координату разворачиваем, потому что у СК окна ось y направлена вниз,
-                // а в классическом представлении - вверх
-                Vector2i windowPos = windowCS.getCoords(p.pos.x, p.pos.y, ownCS);
-                // рисуем точку
-                canvas.drawRect(Rect.makeXYWH(windowPos.x - POINT_SIZE, windowPos.y - POINT_SIZE, POINT_SIZE * 2, POINT_SIZE * 2), paint);
-            }
+//            for (Point p : points) {
+//                if (!solved) {
+//                    paint.setColor(p.getColor());
+//                } else {
+//                    if (crossed.contains(p))
+//                        paint.setColor(CROSSED_COLOR);
+//                    else
+//                        paint.setColor(SUBTRACTED_COLOR);
+//                }
+//                // y-координату разворачиваем, потому что у СК окна ось y направлена вниз,
+//                // а в классическом представлении - вверх
+//                Vector2i windowPos = windowCS.getCoords(p.pos.x, p.pos.y, ownCS);
+//                // рисуем точку
+//                canvas.drawRect(Rect.makeXYWH(windowPos.x - POINT_SIZE, windowPos.y - POINT_SIZE, POINT_SIZE * 2, POINT_SIZE * 2), paint);
+//            }
         }
         canvas.restore();
 
@@ -126,7 +128,7 @@ public class Task {
     public void addPoint(Vector2d pos, Point.PointSet pointSet) {
         solved = false;
         Point newPoint = new Point(pos, pointSet);
-        points.add(newPoint);
+//        points.add(newPoint);
         PanelLog.info("точка " + newPoint + " добавлена в " + newPoint.getSetName());
     }
     /**
@@ -159,63 +161,40 @@ public class Task {
      * @param cnt кол-во случайных точек
      */
     public void addRandomPoints(int cnt) {
-        // если создавать точки с полностью случайными координатами,
-        // то вероятность того, что они совпадут крайне мала
-        // поэтому нужно создать вспомогательную малую целочисленную ОСК
-        // для получения случайной точки мы будем запрашивать случайную
-        // координату этой решётки (их всего 30х30=900).
-        // после нам останется только перевести координаты на решётке
-        // в координаты СК задачи
-        CoordinateSystem2i addGrid = new CoordinateSystem2i(30, 30);
-
-        // повторяем заданное количество раз
-        for (int i = 0; i < cnt; i++) {
-            // получаем случайные координаты на решётке
-            Vector2i gridPos = addGrid.getRandomCoords();
-            // получаем координаты в СК задачи
-            Vector2d pos = ownCS.getCoords(gridPos, addGrid);
-            // сработает примерно в половине случаев
-            if (ThreadLocalRandom.current().nextBoolean())
-                addPoint(pos, Point.PointSet.FIRST_SET);
-            else
-                addPoint(pos, Point.PointSet.SECOND_SET);
-        }
+//        // если создавать точки с полностью случайными координатами,
+//        // то вероятность того, что они совпадут крайне мала
+//        // поэтому нужно создать вспомогательную малую целочисленную ОСК
+//        // для получения случайной точки мы будем запрашивать случайную
+//        // координату этой решётки (их всего 30х30=900).
+//        // после нам останется только перевести координаты на решётке
+//        // в координаты СК задачи
+//        CoordinateSystem2i addGrid = new CoordinateSystem2i(30, 30);
+//
+//        // повторяем заданное количество раз
+//        for (int i = 0; i < cnt; i++) {
+//            // получаем случайные координаты на решётке
+//            Vector2i gridPos = addGrid.getRandomCoords();
+//            // получаем координаты в СК задачи
+//            Vector2d pos = ownCS.getCoords(gridPos, addGrid);
+//            // сработает примерно в половине случаев
+//            if (ThreadLocalRandom.current().nextBoolean())
+//                addPoint(pos, Point.PointSet.FIRST_SET);
+//            else
+//                addPoint(pos, Point.PointSet.SECOND_SET);
+//        }
     }
     /**
      * Очистить задачу
      */
     public void clear() {
-        points.clear();
+//        points.clear();
         solved = false;
     }
     /**
      * Решить задачу
      */
     public void solve() {
-        // очищаем списки
-        crossed.clear();
-        single.clear();
 
-        // перебираем пары точек
-        for (int i = 0; i < points.size(); i++) {
-            for (int j = i + 1; j < points.size(); j++) {
-                // сохраняем точки
-                Point a = points.get(i);
-                Point b = points.get(j);
-                // если точки совпадают по положению
-                if (a.pos.equals(b.pos) && !a.pointSet.equals(b.pointSet)) {
-                    if (!crossed.contains(a)){
-                        crossed.add(a);
-                        crossed.add(b);
-                    }
-                }
-            }
-        }
-
-        /// добавляем вс
-        for (Point point : points)
-            if (!crossed.contains(point))
-                single.add(point);
 
         // задача решена
         solved = true;
