@@ -1,6 +1,7 @@
 package panels;
 
 
+import app.Circle;
 import app.Task;
 import java.util.ArrayList;
 
@@ -99,6 +100,7 @@ public class PanelControl extends GridPanel {
                 6, 7, 3, 3, 3, 1, "Добавить окружность",
                 true, true);
         addCircle.setOnClick(() -> {
+            cancelTask();
             // если числа введены верно
             if (!xField.hasValidDoubleValue()) {
                 PanelLog.warning("X координата введена неверно");
@@ -126,6 +128,7 @@ public class PanelControl extends GridPanel {
                 6, 7, 3, 4, 3, 1, "Добавить\nслучайные окружности",
                 true, true);
         addRndCircles.setOnClick(() -> {
+            cancelTask();
             // если числа введены верно
             if (!cntField.hasValidIntValue()) {
                 PanelLog.warning("кол-во точек указано неверно");
@@ -140,8 +143,8 @@ public class PanelControl extends GridPanel {
                 6, 7, 0, 5, 3, 1, "Загрузить",
                 true, true);
         load.setOnClick(() -> {
-            PanelRendering.load();
             cancelTask();
+            PanelRendering.load();
         });
         buttons.add(load);
 
@@ -156,7 +159,10 @@ public class PanelControl extends GridPanel {
                 window, false, backgroundColor, PANEL_PADDING,
                 6, 7, 0, 6, 3, 1, "Очистить",
                 true, true);
-//        clear.setOnClick(() -> PanelRendering.task.clear());
+        clear.setOnClick(() -> {
+            cancelTask();
+            PanelRendering.task.clear();
+        });
         buttons.add(clear);
 
         solve = new Button(
@@ -164,17 +170,23 @@ public class PanelControl extends GridPanel {
                 6, 7, 3, 6, 3, 1, "Решить",
                 true, true);
         solve.setOnClick(() -> {
-//            if (!PanelRendering.task.isSolved()) {
-//                PanelRendering.task.solve();
-//                String s = "Задача решена\n" +
-//                        "Пересечений: " + PanelRendering.task.getCrossed().size() / 2 + "\n" +
-//                        "Отдельных точек: " + PanelRendering.task.getSingle().size();
-//                PanelLog.success(s);
-//                solve.text = "Сбросить";
-//            } else {
-//                cancelTask();
-//            }
-//            window.requestFrame();
+            if (!PanelRendering.task.isSolved()) {
+                PanelRendering.task.solve();
+                String s;
+                if (!PanelRendering.task.crossed.isEmpty()) {
+                    s = "Задача решена\n" +
+                            "Окружность №1: " + PanelRendering.task.crossed.get(0).toString() + "\n" +
+                            "Окружность №2: " + PanelRendering.task.crossed.get(1).toString() + "\n" +
+                            "Длина пересечения: " + Vector2d.subtract(PanelRendering.task.pointing[0], PanelRendering.task.pointing[1]).length();
+                } else {
+                    s = "Задача не имеет реший";
+                }
+                PanelLog.success(s);
+                solve.text = "Сбросить";
+            } else {
+                cancelTask();
+            }
+            window.requestFrame();
         });
         buttons.add(solve);
     }
@@ -270,7 +282,7 @@ public class PanelControl extends GridPanel {
      * Сброс решения задачи
      */
     private void cancelTask() {
-//        PanelRendering.task.cancel();
+        PanelRendering.task.cancel();
         // Задаём новый текст кнопке решения
         solve.text = "Решить";
     }

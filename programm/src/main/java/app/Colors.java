@@ -39,6 +39,10 @@ public class Colors {
      * Цвет окружности
      */
     public static final int CIRCLE_COLOR = Misc.getColor(200, 0, 255, 255);
+    /**
+     * Цвет линии
+     */
+    public static final int LINE_COLOR = Misc.getColor(255, 178,34,34);
 
 
     /**
