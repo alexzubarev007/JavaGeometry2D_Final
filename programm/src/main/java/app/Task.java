@@ -72,14 +72,14 @@ public class Task {
      */
     @Getter
     @JsonIgnore
-    public ArrayList<Circle> crossed;
+    private ArrayList<Circle> crossed;
 
     /**
      * Точки в ответе
      */
     @Getter
     @JsonIgnore
-    public Vector2d[] pointing;
+    private Vector2d[] pointing;
 
     /**
      * Задача
@@ -90,7 +90,7 @@ public class Task {
     @JsonCreator
     public Task(
             @JsonProperty("ownCS") CoordinateSystem2d ownCS,
-            @JsonProperty("points") ArrayList<Circle> circles
+            @JsonProperty("circles") ArrayList<Circle> circles
     ) {
         this.ownCS = ownCS;
         this.circles = circles;

@@ -24,13 +24,13 @@ public class UnitTest {
         task.solve();
 
         // проверяем размерности массивов
-        assert task.crossed.size() == 2 || task.crossed.isEmpty();
-        assert task.pointing.length == 2;
+        assert task.getCrossed().size() == 2 || task.getCrossed().isEmpty();
+        assert task.getPointing().length == 2;
 
-        if (!task.crossed.isEmpty()) {
+        if (!task.getCrossed().isEmpty()) {
             // проверяем, что ответ правильный
-            assert crossed[0].toString().equals(task.crossed.get(0).toString());
-            assert crossed[1].toString().equals(task.crossed.get(1).toString());
+            assert crossed[0].toString().equals(task.getCrossed().get(0).toString());
+            assert crossed[1].toString().equals(task.getCrossed().get(1).toString());
         }
     }
 

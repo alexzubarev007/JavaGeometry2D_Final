@@ -173,11 +173,11 @@ public class PanelControl extends GridPanel {
             if (!PanelRendering.task.isSolved()) {
                 PanelRendering.task.solve();
                 String s;
-                if (!PanelRendering.task.crossed.isEmpty()) {
+                if (!PanelRendering.task.getCrossed().isEmpty()) {
                     s = "Задача решена\n" +
-                            "Окружность №1: " + PanelRendering.task.crossed.get(0).toString() + "\n" +
-                            "Окружность №2: " + PanelRendering.task.crossed.get(1).toString() + "\n" +
-                            "Длина пересечения: " + Vector2d.subtract(PanelRendering.task.pointing[0], PanelRendering.task.pointing[1]).length();
+                            "Окружность №1: " + PanelRendering.task.getCrossed().get(0).toString() + "\n" +
+                            "Окружность №2: " + PanelRendering.task.getCrossed().get(1).toString() + "\n" +
+                            "Длина пересечения: " + Vector2d.subtract(PanelRendering.task.getPointing()[0], PanelRendering.task.getPointing()[1]).length();
                 } else {
                     s = "Задача не имеет реший";
                 }
