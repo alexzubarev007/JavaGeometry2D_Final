@@ -139,7 +139,7 @@ public class Task {
      */
 
     private static void printCircle(Circle c, Paint paint, CoordinateSystem2i windowCS, CoordinateSystem2d ownCS, io.github.humbleui.skija.Canvas canvas) {
-        double delta = Math.acos(1 - (1 / (25 * c.rad)));
+        double delta = Math.acos(1 - (1 / (50 * c.rad)));
         for (double angle = 0; angle <= Math.PI * 2; angle += delta) {
             printLine(new Vector2d(c.center.x + c.rad * Math.cos(angle), c.center.y + c.rad * Math.sin(angle)),
                     new Vector2d(c.center.x + c.rad * Math.cos(angle + delta), c.center.y + c.rad * Math.sin(angle + delta)),
